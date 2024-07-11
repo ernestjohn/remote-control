@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+
+  certbot:
+    image: certbot/certbot:v1.4.0
+    depends_on:
+      - nginx
+    volumes:
+      - ./deploy/dist/ssl:/etc/letsencrypt
+      - www-certbot-root:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 1d & wait $${!}; done;'"
+    logging:
+      driver: "json-file"
+      options:
+        compress: "true"
+        max-size: "20m"
+        max-file: "5"
+
+  nginx:
+    image: nginx:1.18-alpine
+#    depends_on:
+#      - janus
+    network_mode: host
+    volumes:
+      - ./deploy/dist/conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./deploy/dist/conf/nginx/dhparams.pem:/etc/nginx/dhparams.pem
+      - ./deploy/dist/ssl:/etc/letsencrypt
+      - www-certbot-root:/var/www/certbot
+      - ./deploy/dist/web-admin:/var/www/web-admin/html
+    restart: unless-stopped
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    logging:
+      driver: "json-file"
+      options:
+        compress: "true"
+        max-size: "20m"
+        max-file: "5"
+
+  janus:
+    image: headwindmdm/janus-gateway:0.10.7
+    volumes:
+      - ./deploy/dist/conf/janus:/usr/local/etc/janus
+      - ./deploy/dist/ssl:/etc/letsencrypt
+    network_mode: host
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        compress: "true"
+        max-size: "20m"
+        max-file: "5"
+volumes:
+  # WWW certbot root directory, eg. for ACME challenge (FROM nginx FOR certbot)
+  www-certbot-root:

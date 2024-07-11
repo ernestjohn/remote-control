@@ -1,3 +1,11 @@
+import gulp from 'gulp';
+import concat from  'gulp-concat';
+import size from 'gulp-size';
+import clean from 'gulp-clean';
+import cleanCSS from 'gulp-clean-css';
+import terser from 'gulp-terser';
+
+/*
 const
     gulp = require('gulp'),
     concat = require('gulp-concat'),
@@ -5,7 +13,7 @@ const
     clean = require('gulp-clean'),
     cleanCSS = require('gulp-clean-css'),
     terser = require('gulp-terser')
-;
+;*/
 
 gulp.task('clean', function(){
     return gulp.src('dist/', {read: false})

@@ -29,7 +29,7 @@
       wait_for:
         path: ../web-admin/dist/js/app.min.js
         state: present
-        delay: 5
+        delay: 100
 
     - name: Remove builder
       docker_container:
