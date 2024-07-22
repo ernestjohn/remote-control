@@ -2,3 +2,4 @@
 
 hostname: "remote.kobefon.net"
 email: "ernest@kobefon.com"
+nat: true
