@@ -56,6 +56,19 @@ $(document).ready(function () {
         }
     });
 
+    function getUrlVars()
+    {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+
     // objects
     var janus = null;
     var textroom = null;
@@ -278,10 +291,14 @@ $(document).ready(function () {
         }
     });
 
+    var imei = getUrlVars()["imei"];
+    var sessionId = imei.substring(0,8);
+    var pin = imei.substring(0,4);
     // Session login
     $('#login-form').on('submit', function (e) {
-        var sessionId = $('#input-session-id').val();
-        var pin = $('#input-pin').val();
+        // var sessionId = $('#input-session-id').val();
+        // var pin = $('#input-pin').val();
+        console.log("Starting on imei"+imei + "Session ID: "+sessionId+ "Pin: "+pin);
         ui.connStart();
         remoteVideo.startStreamMountpoint(sessionId, pin);
         remoteChat.startRoom(sessionId, pin);
