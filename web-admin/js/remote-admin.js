@@ -2,6 +2,24 @@ $(document).ready(function () {
     var ui = new UI();
     window['ui'] = ui;
 
+
+    function getUrlVars()
+    {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++)
+        {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+    }
+    
+    var imei = getUrlVars()["imei"];
+    var sessionId = imei.substring(0,8);
+    var pin = imei.substring(0,4);
+
     // Make sure the browser supports WebRTC
     if (!Janus.isWebrtcSupported()) {
         ui.showErrorModal('There is no WebRTC support in this browser. Please, try the newest version of Google Chrome or Mozilla Firefox', 'no_webrtc_support', function(){window.location.reload();});
@@ -56,18 +74,7 @@ $(document).ready(function () {
         }
     });
 
-    function getUrlVars()
-    {
-        var vars = [], hash;
-        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-        for(var i = 0; i < hashes.length; i++)
-        {
-            hash = hashes[i].split('=');
-            vars.push(hash[0]);
-            vars[hash[0]] = hash[1];
-        }
-        return vars;
-    }
+    
 
     // objects
     var janus = null;
@@ -291,9 +298,7 @@ $(document).ready(function () {
         }
     });
 
-    var imei = getUrlVars()["imei"];
-    var sessionId = imei.substring(0,8);
-    var pin = imei.substring(0,4);
+    
 
     console.log("Starting on imei"+imei + "Session ID: "+sessionId+ "Pin: "+pin);
     $('#input-session-id').val(imei);
