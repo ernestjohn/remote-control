@@ -294,6 +294,10 @@ $(document).ready(function () {
     var imei = getUrlVars()["imei"];
     var sessionId = imei.substring(0,8);
     var pin = imei.substring(0,4);
+
+    console.log("Starting on imei"+imei + "Session ID: "+sessionId+ "Pin: "+pin);
+    $('#input-session-id').val(imei);
+    $('#input-pin').val(pin);
     // Session login
     $('#login-form').on('submit', function (e) {
         // var sessionId = $('#input-session-id').val();
